@@ -1,5 +1,6 @@
 # Travelling salesman problem 
 
+[![Makefile CI](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml/badge.svg)](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml)
 End to end solution for the travelling salesman problem using a greedy algorithm. 
 
 
