@@ -62,11 +62,8 @@ def greedy_salesman(df:pd.DataFrame, distances:pd.DataFrame, startingCity:str)->
         distancesTravelled.append(distances.loc[currentCity, nextCity])
         visited.append(nextCity)
         unvisited.remove(nextCity)
-        print(
-            f"Going from {currentCity} to {nextCity} with distance {np.round(distances.loc[currentCity, nextCity],2)} km"
-        )
 
-    print(f"Total distance travelled: {np.round(sum(distancesTravelled),2)} km")
+   
     return visited, distancesTravelled
 
 
@@ -98,11 +95,12 @@ def plot_path(df: pd.DataFrame, path:list, path_distances:list):
                 lon=[ordered_longitudes[i], ordered_longitudes[i + 1]],
                 lat=[ordered_latitudes[i], ordered_latitudes[i + 1]],
                 mode="lines",
+                opacity=0.3,
                 line=dict(width=2, color="blue"),
                 hoverinfo="text",
                 text=f"Distance: {np.round(path_distances[i],0)} km",  # Add distance to hover text
                 name=f"{path[i]} to {path[i+1]}",  # Add custom legend text
-                showlegend=True,  # Ensure the trace appears in the legend
+                showlegend=False,  # Ensure the trace appears in the legend
             )
         )
 
@@ -114,21 +112,48 @@ def plot_path(df: pd.DataFrame, path:list, path_distances:list):
             landcolor="lightgray",
             countrycolor="darkgray",
         ),
-        title="City Path with Arrows and Distances",
-        height=600,  # Increase height
-        width=900,  # Increase width
+        title=f"Path of the Travelling Salesman when starting in {df['City'][0]}",
+        height=800,  # Increase height
+        width=1600,  # Increase width
     )
 
     # Optionally, adjust text positions and marker sizes
     fig.update_traces(textposition="top center", marker=dict(size=10, color="blue"))
 
-    fig.show()
+    return fig
+
+def simulation(count:int, cities:pd.DataFrame,distances:pd.DataFrame,startingCity:str)->tuple:
+    """
+    Run a simulation of the greedy salesman algorithm for a given number of iterations and return the best path found.
+    Parameters:
+    count (int): The number of iterations to run the simulation.
+    cities (pandas.DataFrame): DataFrame containing city information with at least a column named "City".
+    distances (pandas.DataFrame): DataFrame containing the distances between cities. The index and columns should be city names.
+    startingCity (str): The name of the city from which the salesman starts the journey.
+    Returns:
+    tuple: A tuple containing:
+        - best_path (list): List of cities in the best path found.
+        - best_distance (float): Total distance travelled in the best path.
+    """
+    best_distance = np.inf
+    best_path = []
+    best_dist_list = []
+    for i in range(count):
+        visited, distancesTravelled = greedy_salesman(cities, distances, startingCity)
+        total_distance = sum(distancesTravelled)
+        if total_distance < best_distance:
+            best_distance = total_distance
+            best_path = visited
+            best_dist_list = distancesTravelled
+    return best_path, best_dist_list
+    
 
 
 def main():
     cities = get_long_lat_dataFrame()
     distances = compute_distances(cities)
-    visited, distancesTravelled = greedy_salesman(cities, distances, "Brussels")
+    numSim = 100
+    visited, distancesTravelled = simulation(numSim, cities, distances, "Brussels")
     plot_path(cities, visited, distancesTravelled)
 
 

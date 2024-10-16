@@ -23,7 +23,7 @@ def get_long_lat_dataFrame(cities: list = None) -> pd.DataFrame:
     1  Los Angeles  34.052235 -118.243683
     """
     # if the list of cities is empty, use a default list of cities
-    if len(cities) == 0:
+    if cities is None or len(cities) == 0:
         cities:list= [
             "Brussels",
             "Paris",
