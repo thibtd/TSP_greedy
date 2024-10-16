@@ -1,6 +1,6 @@
 # Travelling salesman problem 
 
-[!Streamlit app : (https://tspgreedy.streamlit.app/)]  [![Makefile CI](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml/badge.svg)](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://tspgreedy.streamlit.app/)  [![Makefile CI](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml/badge.svg)](https://github.com/thibtd/TSP_greedy/actions/workflows/main.yml)
 
 End to end solution for the travelling salesman problem using a greedy algorithm. 
 
