@@ -50,6 +50,7 @@ def output(plot:object, visited:list, distancesTravelled:list):
     
 
 if __name__ == "__main__":
+    st.set_page_config(layout="wide")
     numSim, cities_input_list, startingCity = Input()
     
     if st.button("Run Simulation",icon="🛠️"):
