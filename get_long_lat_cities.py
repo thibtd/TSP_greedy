@@ -24,7 +24,7 @@ def get_long_lat_dataFrame(cities: list = None) -> pd.DataFrame:
     """
     # if the list of cities is empty, use a default list of cities
     if cities is None or len(cities) == 0:
-        cities:list= [
+        cities: list = [
             "Brussels",
             "Paris",
             "Madrid",
@@ -52,12 +52,14 @@ def get_long_lat_dataFrame(cities: list = None) -> pd.DataFrame:
     for city in cities:
         location = geolocator.geocode(city)
         # print(city, location.latitude, location.longitude)
-        new_city:dict = {
+        new_city: dict = {
             "City": city,
             "latitude": location.latitude,
             "longitude": location.longitude,
         }
         cities_list.append(new_city)
 
-    city_df:pd.DataFrame = pd.DataFrame(data=cities_list, columns=["City", "latitude", "longitude"])
+    city_df: pd.DataFrame = pd.DataFrame(
+        data=cities_list, columns=["City", "latitude", "longitude"]
+    )
     return city_df

@@ -9,21 +9,21 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def compute_distances(df)-> pd.DataFrame:
+def compute_distances(df) -> pd.DataFrame:
     """
     Compute a distance matrix for a given DataFrame of cities with their coordinates.
-    This function takes a DataFrame containing city names and their corresponding 
-    latitude and longitude values, and returns a DataFrame representing the distance 
-    matrix. The distance between each pair of cities is calculated using the Haversine 
+    This function takes a DataFrame containing city names and their corresponding
+    latitude and longitude values, and returns a DataFrame representing the distance
+    matrix. The distance between each pair of cities is calculated using the Haversine
     formula, and the diagonal elements (distance from a city to itself) are set to infinity.
     Parameters:
     df (pd.DataFrame): A DataFrame with columns 'City', 'latitude', and 'longitude'.
     Returns:
-    pd.DataFrame: A DataFrame where the entry at (i, j) represents the distance in 
+    pd.DataFrame: A DataFrame where the entry at (i, j) represents the distance in
                   kilometers between the i-th and j-th cities from the input DataFrame.
     """
-    
-    distances :pd.DataFrame = pd.DataFrame(
+
+    distances: pd.DataFrame = pd.DataFrame(
         np.zeros((len(df), len(df))), columns=df["City"], index=df["City"]
     )
     for i in range(len(df)):
@@ -38,8 +38,9 @@ def compute_distances(df)-> pd.DataFrame:
     return distances
 
 
-def greedy_salesman(df:pd.DataFrame, distances:pd.DataFrame, startingCity:str)-> tuple:
-
+def greedy_salesman(
+    df: pd.DataFrame, distances: pd.DataFrame, startingCity: str
+) -> tuple:
     """
     Implements a greedy algorithm to solve the Traveling Salesman Problem (TSP) for a given set of cities.
     Parameters:
@@ -51,23 +52,22 @@ def greedy_salesman(df:pd.DataFrame, distances:pd.DataFrame, startingCity:str)->
         - visited (list): List of cities in the order they were visited.
         - distancesTravelled (list): List of distances travelled between consecutive cities.
     """
-    
-    visited:list = [startingCity]
-    distancesTravelled:list = []
-    unvisited:list = df["City"].tolist()
+
+    visited: list = [startingCity]
+    distancesTravelled: list = []
+    unvisited: list = df["City"].tolist()
     unvisited.remove(startingCity)
     for _ in range(len(df) - 1):
-        currentCity:str = visited[-1]
-        nextCity:str = distances.loc[currentCity, unvisited].idxmin()
+        currentCity: str = visited[-1]
+        nextCity: str = distances.loc[currentCity, unvisited].idxmin()
         distancesTravelled.append(distances.loc[currentCity, nextCity])
         visited.append(nextCity)
         unvisited.remove(nextCity)
 
-   
     return visited, distancesTravelled
 
 
-def plot_path(df: pd.DataFrame, path:list, path_distances:list):
+def plot_path(df: pd.DataFrame, path: list, path_distances: list):
     """
     Plots a path of cities on a geographical map with arrows indicating the path and distances between consecutive cities.
     Parameters:
@@ -122,7 +122,10 @@ def plot_path(df: pd.DataFrame, path:list, path_distances:list):
 
     return fig
 
-def simulation(count:int, cities:pd.DataFrame,distances:pd.DataFrame,startingCity:str)->tuple:
+
+def simulation(
+    count: int, cities: pd.DataFrame, distances: pd.DataFrame, startingCity: str
+) -> tuple:
     """
     Run a simulation of the greedy salesman algorithm for a given number of iterations and return the best path found.
     Parameters:
@@ -138,7 +141,7 @@ def simulation(count:int, cities:pd.DataFrame,distances:pd.DataFrame,startingCit
     best_distance = np.inf
     best_path = []
     best_dist_list = []
-    for i in range(count):
+    for _ in range(count):
         visited, distancesTravelled = greedy_salesman(cities, distances, startingCity)
         total_distance = sum(distancesTravelled)
         if total_distance < best_distance:
@@ -146,7 +149,6 @@ def simulation(count:int, cities:pd.DataFrame,distances:pd.DataFrame,startingCit
             best_path = visited
             best_dist_list = distancesTravelled
     return best_path, best_dist_list
-    
 
 
 def main():
